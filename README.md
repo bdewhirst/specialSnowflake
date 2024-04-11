@@ -29,7 +29,7 @@ quick repo to record learnings from Snowflake tutorials, etc.
 - screenshots are slightly out of date (as noted)
 - although demo/tutorial says to use sysadmin, I have been using accountadmin; this is likely permissions related (but may also reflect changing security recommendations for Snowflake.)
 
-# first tutorial script
+# first tutorial script (complete; 'zero to snowflake' tutorial)
 
 ```create or replace table trips
 (tripduration integer,
@@ -101,7 +101,7 @@ create table trips_dev clone trips;  -- doesn't double the storage requirements
 -- beginning of step 7 of tutorial; weather analysis and working with semi-structured data
 create or replace database weather;  -- my edit, making it re-entrant (at the risk of blowing away the new database)
 
-use role accountadmin;
+use role accountadmin;  -- access control hasn't been covered, and I've tweaked this step to not be sysadmin to align w/ my related workaround.
 use warehouse compute_wh;
 use database weather;
 use schema public;
@@ -169,7 +169,7 @@ undrop table json_weather_data;
 select * from json_weather_data limit 10;
 
 -- step 8; using time travel
-use role accountadmin;
+use role accountadmin;  -- access control hasn't been covered, and I've tweaked this step to not be sysadmin to align w/ my related workaround.
 use warehouse compute_wh;
 use database citibike;
 use schema public;
@@ -204,6 +204,41 @@ limit 20;
 
 -- step 9: working with roles, account admin, and account usage-- maybe this is where I figure out why I've had to tweak a few things...
 -- ACCOUNTADMIN is both SYSADMIN and SECURITYADMIN system-defined roles; so this is running with elevated permissions; fine for practice, dangerous in practice.
+create role junior_dba;
+-- grant role junior_dba to user --... "[MY USERNAME HERE]"; -- run once w/ username in place.
 
+use role junior_dba;
+
+use role accountadmin;
+
+grant usage on warehouse compute_wh to role junior_dba;
+use role junior_dba;
+use warehouse compute_wh;
+
+use role accountadmin;
+grant usage on database citibike to role junior_dba;
+grant usage on database weather to role junior_dba;
+
+use role junior_dba;
+
+-- n.b.:  note that access in-script and access in the web UI are separate!
+
+
+
+-- step 10: sharing data securely & the data marketplace
+-- (this is handled in the UI, but note that there are free sources of data in the marketplace)
+
+
+-- step 11: resetting your snowflake environment
+-- (post-lab clean-up)
+use role accountadmin;
+
+drop share if exists zero_to_snowflake_shared_data;
+-- If necessary, replace "zero_to_snowflake-shared_data" with the name you used for the share
+
+drop database if exists citibike;
+drop database if exists weather;
+drop warehouse if exists analytics_wh;
+drop role if exists junior_dba;
 
 ```
