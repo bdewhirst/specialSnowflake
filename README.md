@@ -3,6 +3,8 @@ quick repo to record learnings from Snowflake tutorials, etc.
 
 #### Brian Dewhirst | b.dewhirst@gmail.com
 
+**please note** while this is public for visibility, yes, this is just someone running thru a SaaS vendor's tutorial.
+
 # Starting from here:
 ## Ref: https://quickstarts.snowflake.com/guide/getting_started_with_snowflake/index.html?index=..%2F..index#0
 
