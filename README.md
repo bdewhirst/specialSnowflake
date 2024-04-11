@@ -23,6 +23,8 @@ quick repo to record learnings from Snowflake tutorials, etc.
 
 - it caches intelligently (and doesn't charge compute for re-running a cached query).
 
+- "Snowflake to MySQL" is a pattern to consider:  https://www.basedash.com/blog/snowflake-to-mysql-a-guide
+
 ### misc notes WRT first tutorial
 - screenshots are slightly out of date (as noted)
 - although demo/tutorial says to use sysadmin, I have been using accountadmin; this is likely permissions related (but may also reflect changing security recommendations for Snowflake.)
@@ -67,5 +69,31 @@ create or replace file format csv type='csv'
 -- clear out data to re-try w/ larger engine (tutorial step )
 truncate table trips;
 
-...
+--verify table is clear
+select * from trips limit 10;
+
+--load data with large warehouse
+show warehouses;
+
+copy into trips from @citibike_trips
+file_format=CSV;
+  
+select * from trips limit 20;
+
+-- here's where we (seemlessly) changed to the new analytics warehouse we created with a few clicks
+
+select date_trunc('hour', starttime) as "date",
+count(*) as "num trips",
+avg(tripduration)/60 as "avg duration (mins)",
+avg(haversine(start_station_latitude, start_station_longitude, end_station_latitude, end_station_longitude)) as "avg distance (km)"
+from trips
+group by 1 order by 1;
+
+
+select
+monthname(starttime) as "month",
+count(*) as "num trips"
+from trips
+group by 1 order by 2 desc;
+
 ```
