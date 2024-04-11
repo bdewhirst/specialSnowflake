@@ -96,4 +96,15 @@ count(*) as "num trips"
 from trips
 group by 1 order by 2 desc;
 
+-- this 'zero copy cloning' is really cool
+create table trips_dev clone trips;  -- doesn't double the storage requirements
+
+-- beginning of step 7 of tutorial; weather analysis and working with semi-structured data
+create or replace database weather;  -- my edit, making it re-entrant (at the risk of blowing away the new database)
+
+use role accountadmin;
+use warehouse compute_wh;
+use database weather;
+use schema public;
+
 ```
