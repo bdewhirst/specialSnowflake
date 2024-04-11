@@ -19,6 +19,10 @@ quick repo to record learnings from Snowflake tutorials, etc.
 
 - the web gui accepts "control+enter" as the command to execute a highlighted bit of SQL
 
+- you can scale resources up or down easily
+
+- it caches intelligently (and doesn't charge compute for re-running a cached query).
+
 ### misc notes WRT first tutorial
 - screenshots are slightly out of date (as noted)
 - although demo/tutorial says to use sysadmin, I have been using accountadmin; this is likely permissions related (but may also reflect changing security recommendations for Snowflake.)
